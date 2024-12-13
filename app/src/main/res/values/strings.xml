@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ZooAppCompose</string>
     <string name="zoo_name">臺北市立動物園</string>
+    <string name="open_on_web">在網頁開啟</string>
+    <string name="no_info">尚無資訊</string>
+    <string name="no_animal">尚無動物資訊</string>
 </resources>

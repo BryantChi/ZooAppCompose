@@ -5,7 +5,7 @@ import com.bryantcoding.zooappcompose.data.model.ZooAreaResponse
 import com.bryantcoding.zooappcompose.data.repository.DataRepository
 import javax.inject.Inject
 
-class DataUseCase @Inject constructor(
+class GetDataUseCase @Inject constructor(
     private val dataRepository: DataRepository
 ) {
     /**
@@ -13,6 +13,15 @@ class DataUseCase @Inject constructor(
      */
     suspend fun getZooAreasList(): List<ZooAreaResponse.ZooArea> {
         return dataRepository.getZooAreas().result.results ?: emptyList()
+    }
+
+    /**
+     * 獲取動物園區域詳情
+     */
+    suspend fun getZooAreaDetail(zooAreaID: Int): ZooAreaResponse.ZooArea {
+        return dataRepository.getZooAreas().result.results?.find {
+            it.id == zooAreaID
+        }?: ZooAreaResponse.ZooArea()
     }
 
     /**

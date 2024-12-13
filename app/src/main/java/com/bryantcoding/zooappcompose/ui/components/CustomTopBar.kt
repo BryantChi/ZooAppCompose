@@ -25,8 +25,8 @@ import androidx.navigation.NavController
 fun CustomTopBar(
     title: String,
     navController: NavController? = null, // 動態導航支援
-    showBackButton: Boolean = false,
-    onBackClick: (() -> Unit)? = null,
+    isBack: Boolean = false,
+    onClick: (() -> Unit)? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.background, // 背景色
     contentColor: Color = MaterialTheme.colorScheme.onBackground, // 內容顏色
     actions: @Composable (RowScope.() -> Unit)? = null // 自訂操作按鈕
@@ -40,36 +40,41 @@ fun CustomTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (showBackButton) {
+            if (isBack) {
                 IconButton(
                     onClick = {
                         if (navController != null) {
                             navController.popBackStack() // 動態返回
                         } else {
-                            onBackClick?.invoke() // 自訂返回邏輯
+                            onClick?.invoke() // 自訂返回邏輯
                         }
                     }
                 ) {
-                    if (navController != null) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = contentColor
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Back",
-                            tint = contentColor
-                        )
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = contentColor
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = {
+                        Log.d("CustomTopBar", "Menu button clicked")
+                        onClick?.invoke()
                     }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Menu",
+                        tint = contentColor
+                    )
                 }
             }
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
                 color = contentColor,
-                modifier = Modifier.padding(start = if (showBackButton) 8.dp else 0.dp)
+                modifier = Modifier.padding(start = if (isBack) 8.dp else 0.dp)
             )
         }
 

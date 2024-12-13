@@ -17,7 +17,7 @@ fun CustomImageWithCoil(
     modifier: Modifier = Modifier,
     contentDescription: String? = null
 ) {
-    Log.d(Route.ZooAreasScreen::class.simpleName, "zooAreaPic: ${imageUrl}")
+//    Log.d(Route.ZooAreasScreen::class.simpleName, "zooAreaPic: ${imageUrl}")
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context = LocalContext.current)
             .data(imageUrl)

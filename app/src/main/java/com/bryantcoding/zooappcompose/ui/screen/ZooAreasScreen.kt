@@ -2,6 +2,7 @@ package com.bryantcoding.zooappcompose.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,22 +27,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.bryantcoding.zooappcompose.R
 import com.bryantcoding.zooappcompose.data.model.ZooAreaResponse
-import com.bryantcoding.zooappcompose.ui.components.BasePageLoading
+import com.bryantcoding.zooappcompose.ui.components.BaseLoading
+import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
 import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
 import com.bryantcoding.zooappcompose.ui.components.CustomTopBar
+import com.bryantcoding.zooappcompose.ui.navgation.Route
 import com.bryantcoding.zooappcompose.viewmodel.UiState
 import com.bryantcoding.zooappcompose.viewmodel.ZooAreaViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ZooAreasScreen(
+    navController: NavController,
     viewModel: ZooAreaViewModel
 ) {
-    val zooAreas by viewModel.zooInfoStatus.collectAsState()
+    val zooAreas by viewModel.zooInfo.collectAsState()
 
     if (zooAreas !is UiState.Success) {
         LaunchedEffect(Unit) {
@@ -51,15 +59,16 @@ fun ZooAreasScreen(
         topBar = {
             CustomTopBar(
                 title = stringResource(id = R.string.zoo_name),
-                showBackButton = true
+                navController = navController,
+                isBack = false
             )
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (val state = zooAreas) {
-                is UiState.Loading -> ShowLoading()
-                is UiState.Success -> ShowZooAreas(state.data)
-                is UiState.Error -> ShowError(state.message)
+                is UiState.Loading -> BaseLoading()
+                is UiState.Success -> ShowZooAreas(navController, state.data)
+                is UiState.Error -> CustomErrorText(state.message)
             }
         }
     }
@@ -68,19 +77,7 @@ fun ZooAreasScreen(
 }
 
 @Composable
-fun ShowError(message: String) {
-    Text(
-        text = message,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.error
-    )
-}
-
-@Composable
-fun ShowZooAreas(data: List<ZooAreaResponse.ZooArea>) {
+fun ShowZooAreas(navController: NavController, data: List<ZooAreaResponse.ZooArea>) {
     LazyColumn {
         items(data, key = { it.id ?: 0 }) { zooArea ->
             Card(
@@ -88,7 +85,13 @@ fun ShowZooAreas(data: List<ZooAreaResponse.ZooArea>) {
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(8.dp)
-//                    .clickable { navController.navigate("zoo_area_detail/${zooArea.id}") }
+                    .clickable {
+                        navController.navigate(Route.ZooAreaDetailScreen.createRoute(zooArea.id ?: 0))
+                    },
+                shape = RoundedCornerShape(8.dp),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 4.dp
+                )
             ) {
 
                 Row(
@@ -110,6 +113,7 @@ fun ShowZooAreas(data: List<ZooAreaResponse.ZooArea>) {
                         Text(
                             text = zooArea.eName ?: "-",
                             style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.padding(bottom = 8.dp)
@@ -134,9 +138,4 @@ fun ShowZooAreas(data: List<ZooAreaResponse.ZooArea>) {
             }
         }
     }
-}
-
-@Composable
-fun ShowLoading() {
-    BasePageLoading()
 }
