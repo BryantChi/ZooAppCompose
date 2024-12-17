@@ -2,8 +2,6 @@ package com.bryantcoding.zooappcompose.domain.usecase
 
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
-import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
-import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
 import com.bryantcoding.zooappcompose.data.repository.DataRepository
 import javax.inject.Inject
 
@@ -33,5 +31,14 @@ class GetDataUseCase @Inject constructor(
         return dataRepository.getAnimals().filter {
             it.location == zooAreaName
         }
+    }
+
+    /**
+     * 獲取動物詳情
+     */
+    suspend fun getAnimalDetail(animalID: Int): AnimalEntity {
+        return dataRepository.getAnimals().find {
+            it.id == animalID
+        } ?: AnimalEntity()
     }
 }

@@ -32,4 +32,7 @@ fun AnimalResponse.Animal.toEntity() = AnimalEntity(
     habitat = habitat ?: "",
     conservation = conservation ?: "",
     geo = geo ?: "",
+    distribution = distribution ?: "",
+    diet = diet ?: "",
+    importDate = importDate?.date ?: "",
 )

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,10 +59,9 @@ import com.bryantcoding.zooappcompose.ui.components.BaseLoading
 import com.bryantcoding.zooappcompose.ui.components.CommonBottomSheet
 import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
 import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
-import com.bryantcoding.zooappcompose.ui.components.CustomTopBar
 import com.bryantcoding.zooappcompose.ui.components.SingleImageCarousel
 import com.bryantcoding.zooappcompose.ui.navgation.Route
-import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaViewModel
+import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaDetailViewModel
 import com.bryantcoding.zooappcompose.utils.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -71,7 +70,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ZooAreaDetailScreen(
     navController: NavController,
-    viewModel: ZooAreaViewModel
+    viewModel: ZooAreaDetailViewModel
 ) {
     val zooAreaDetail by viewModel.zooAreaDetail.collectAsState()
     val animalListState by viewModel.animalList.collectAsState()
@@ -110,35 +109,29 @@ fun ZooAreaDetailScreen(
             }
         }
     ) {
-        Scaffold(
-            topBar = {
-                CustomTopBar(
-                    title = zooAreaDetail.run {
-                        if (this is UiState.Success) data.eName
-                            ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name)
-                    },
-                    navController = navController,
-                    isBack = true
-                )
-            }
-        ) { innerPadding ->
-            Box(modifier = Modifier.padding(innerPadding)) {
-                when (val state = zooAreaDetail) {
-                    is UiState.Loading -> BaseLoading()
-                    is UiState.Success -> ShowZooAreasDetail(
-                        navController,
-                        state.data,
-                        viewModel,
-                        animalListState,
-                        modelSheetState,
-                        coroutineScope
-                    )
 
-                    is UiState.Error -> CustomErrorText(state.message)
-                }
+        BaseScreen(
+            navController = navController,
+            title = zooAreaDetail.run {
+                if (this is UiState.Success) data.eName
+                    ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name)
+            },
+            isBack = true
+        ) {
+            when (val state = zooAreaDetail) {
+                is UiState.Loading -> BaseLoading()
+                is UiState.Success -> ShowZooAreasDetail(
+                    navController,
+                    state.data,
+                    viewModel,
+                    animalListState,
+                    modelSheetState,
+                    coroutineScope
+                )
+
+                is UiState.Error -> CustomErrorText(state.message)
             }
         }
-
     }
 
 //    BottomSheetScaffold(
@@ -174,7 +167,7 @@ fun ZooAreaDetailScreen(
 fun ShowZooAreasDetail(
     navController: NavController,
     data: ZooAreaEntity,
-    viewModel: ZooAreaViewModel,
+    viewModel: ZooAreaDetailViewModel,
     animalListState: UiState<List<AnimalEntity>>,
     modelSheetState: ModalBottomSheetState,
     coroutineScope: CoroutineScope
@@ -260,13 +253,21 @@ fun ShowZooAreasDetail(
             is UiState.Success -> {
                 animalListState.data.takeIf { it.isNotEmpty() }?.run {
                     items(this, key = { it.id }) { animal ->
-                        AnimalItem(animal, navController) {
-                            viewModel.setSelectedAnimal(animal)
-                            coroutineScope.launch {
-                                modelSheetState.show()
+                        AnimalItem(animal, navController,
+                            onClick = {
+                                navController.navigate(
+                                    Route.AnimalDetailScreen.createRoute(
+                                        animal.id ?: 0
+                                    )
+                                )
+                            },
+                            onLongClick = {
+                                viewModel.setSelectedAnimal(animal)
+                                coroutineScope.launch {
+                                    modelSheetState.show()
 //                            scaffoldState.bottomSheetState.expand()
-                            }
-                        }
+                                }
+                            })
                     }
                 } ?: run {
                     item {
@@ -297,23 +298,30 @@ fun ShowZooAreasDetail(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimalItem(
     animal: AnimalEntity,
     navController: NavController,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .combinedClickable(
+                onClick = {
+                    onClick?.invoke()
+                },
+                onLongClick = {
+                    onLongClick?.invoke()
+                },
+            ),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
-        ),
-        onClick = {
-            onClick?.invoke()
-        }
+        )
     ) {
 
         Row(

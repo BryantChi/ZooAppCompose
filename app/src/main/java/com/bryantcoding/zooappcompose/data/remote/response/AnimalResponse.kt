@@ -16,7 +16,7 @@ data class AnimalResponse(
 
     data class Animal(
         @SerializedName("_id") val id: Int,
-        @SerializedName("_importdate") val importDate: ImportDate,
+        @SerializedName("_importdate") val importDate: ImportDate?,
         @SerializedName("a_name_ch") val nameCh: String?,
         @SerializedName("a_summary") val summary: String?,
         @SerializedName("a_keywords") val keywords: String?,
@@ -66,9 +66,9 @@ data class AnimalResponse(
     ) : Serializable
 
     data class ImportDate(
-        @SerializedName("date") val date: String,
-        @SerializedName("timezone_type") val timezoneType: Int,
-        @SerializedName("timezone") val timezone: String
+        @SerializedName("date") val date: String?,
+        @SerializedName("timezone_type") val timezoneType: Int?,
+        @SerializedName("timezone") val timezone: String?
     ) : Serializable
 }
 

@@ -10,4 +10,7 @@ sealed class Route(
     data object WebViewScreen : Route("web_view/{url}") {
         fun createRoute(url: String) = "web_view/$url"
     }
+    data object AnimalDetailScreen : Route("animal_detail/{id}") {
+        fun createRoute(id: Int) = "animal_detail/$id"
+    }
 }

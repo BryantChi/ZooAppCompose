@@ -2,6 +2,7 @@ package com.bryantcoding.zooappcompose.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -48,5 +49,14 @@ data class AnimalEntity(
     val geo: String? = "", // 動物地理位置
 
     @SerializedName("a_location")
-    val location: String? = "", // 動物分布區域
+    val location: String? = "", // 動物分布區域,
+
+    @SerializedName("a_distribution")
+    val distribution: String? = "", // 動物分布區域,
+
+    @SerializedName("a_diet")
+    val diet: String? = "", // 動物飲食特徵
+
+    @SerializedName("_importdate")
+    val importDate: String? = ""
 ) : Serializable

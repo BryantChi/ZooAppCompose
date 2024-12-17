@@ -3,7 +3,6 @@ package com.bryantcoding.zooappcompose.ui.screen
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +34,6 @@ import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
 import com.bryantcoding.zooappcompose.ui.components.BaseLoading
 import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
 import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
-import com.bryantcoding.zooappcompose.ui.components.CustomTopBar
 import com.bryantcoding.zooappcompose.ui.navgation.Route
 import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaViewModel
 import com.bryantcoding.zooappcompose.utils.UiState
@@ -55,25 +52,16 @@ fun ZooAreasScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            CustomTopBar(
-                title = stringResource(id = R.string.zoo_name),
-                navController = navController,
-                isBack = false
-            )
-        }
-    ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            when (val state = zooAreas) {
-                is UiState.Loading -> BaseLoading()
-                is UiState.Success -> ShowZooAreas(navController, state.data)
-                is UiState.Error -> CustomErrorText(state.message)
-            }
+    BaseScreen(
+        navController = navController,
+        title = stringResource(id = R.string.zoo_name)
+    ) {
+        when (val state = zooAreas) {
+            is UiState.Loading -> BaseLoading()
+            is UiState.Success -> ShowZooAreas(navController, state.data)
+            is UiState.Error -> CustomErrorText(state.message)
         }
     }
-
-
 }
 
 @Composable

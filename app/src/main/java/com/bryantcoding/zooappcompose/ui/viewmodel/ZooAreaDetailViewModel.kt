@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
-import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
-import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
 import com.bryantcoding.zooappcompose.domain.usecase.GetDataUseCase
 import com.bryantcoding.zooappcompose.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,12 +13,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ZooAreaViewModel @Inject constructor(
+class ZooAreaDetailViewModel @Inject constructor(
     private val getDataUseCase: GetDataUseCase
 ): ViewModel() {
-    private val _zooInfo = MutableStateFlow<UiState<List<ZooAreaEntity>>>(UiState.Loading)
-    val zooInfo: StateFlow<UiState<List<ZooAreaEntity>>> = _zooInfo
-
     private val _zooAreaDetail = MutableStateFlow<UiState<ZooAreaEntity>>(UiState.Loading)
     val zooAreaDetail: StateFlow<UiState<ZooAreaEntity>> = _zooAreaDetail
 
@@ -29,18 +24,6 @@ class ZooAreaViewModel @Inject constructor(
 
     private val _selectedAnimal = MutableStateFlow<AnimalEntity?>(null)
     val selectedAnimal: StateFlow<AnimalEntity?> = _selectedAnimal
-
-    fun fetchZooAreas() {
-        viewModelScope.launch {
-            _zooInfo.emit(UiState.Loading)
-            try {
-                val result = getDataUseCase.getZooAreasList()
-                _zooInfo.emit(UiState.Success(result))
-            } catch (e: Exception) {
-                _zooInfo.emit(UiState.Error(e.message ?: "Unknown error"))
-            }
-        }
-    }
 
     fun fetchZooAreaDetail(zooAreaID: Int) {
         viewModelScope.launch {

@@ -4,4 +4,10 @@
     <string name="open_on_web">在網頁開啟</string>
     <string name="no_info">尚無資訊</string>
     <string name="no_animal">尚無動物資訊</string>
+    <string name="distribution">分佈區域</string>
+    <string name="habitat">棲息地</string>
+    <string name="feature">特色</string>
+    <string name="behavior">特性</string>
+    <string name="diet">飲食</string>
+    <string name="import_date">資料更新日期</string>
 </resources>
