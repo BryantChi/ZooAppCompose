@@ -1,4 +1,4 @@
-package com.bryantcoding.zooappcompose.data.model
+package com.bryantcoding.zooappcompose.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

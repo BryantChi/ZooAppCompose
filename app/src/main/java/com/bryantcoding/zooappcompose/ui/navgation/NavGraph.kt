@@ -11,7 +11,7 @@ import com.bryantcoding.zooappcompose.ui.components.WebViewScreen
 import com.bryantcoding.zooappcompose.ui.screen.ZooAreaDetailScreen
 import com.bryantcoding.zooappcompose.ui.screen.ZooAreasScreen
 import com.bryantcoding.zooappcompose.ui.theme.ZooAppComposeTheme
-import com.bryantcoding.zooappcompose.viewmodel.ZooAreaViewModel
+import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaViewModel
 
 @Composable
 fun NavGraph() {

@@ -1,10 +1,13 @@
-package com.bryantcoding.zooappcompose.viewmodel
+package com.bryantcoding.zooappcompose.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bryantcoding.zooappcompose.data.model.AnimalResponse
-import com.bryantcoding.zooappcompose.data.model.ZooAreaResponse
+import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
+import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
+import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
+import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
 import com.bryantcoding.zooappcompose.domain.usecase.GetDataUseCase
+import com.bryantcoding.zooappcompose.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,17 +18,17 @@ import javax.inject.Inject
 class ZooAreaViewModel @Inject constructor(
     private val getDataUseCase: GetDataUseCase
 ): ViewModel() {
-    private val _zooInfo = MutableStateFlow<UiState<List<ZooAreaResponse.ZooArea>>>(UiState.Loading)
-    val zooInfo: StateFlow<UiState<List<ZooAreaResponse.ZooArea>>> = _zooInfo
+    private val _zooInfo = MutableStateFlow<UiState<List<ZooAreaEntity>>>(UiState.Loading)
+    val zooInfo: StateFlow<UiState<List<ZooAreaEntity>>> = _zooInfo
 
-    private val _zooAreaDetail = MutableStateFlow<UiState<ZooAreaResponse.ZooArea>>(UiState.Loading)
-    val zooAreaDetail: StateFlow<UiState<ZooAreaResponse.ZooArea>> = _zooAreaDetail
+    private val _zooAreaDetail = MutableStateFlow<UiState<ZooAreaEntity>>(UiState.Loading)
+    val zooAreaDetail: StateFlow<UiState<ZooAreaEntity>> = _zooAreaDetail
 
-    private val _animalList = MutableStateFlow<UiState<List<AnimalResponse.Animal>>>(UiState.Loading)
-    val animalList: StateFlow<UiState<List<AnimalResponse.Animal>>> = _animalList
+    private val _animalList = MutableStateFlow<UiState<List<AnimalEntity>>>(UiState.Loading)
+    val animalList: StateFlow<UiState<List<AnimalEntity>>> = _animalList
 
-    private val _selectedAnimal = MutableStateFlow<AnimalResponse.Animal?>(null)
-    val selectedAnimal: StateFlow<AnimalResponse.Animal?> = _selectedAnimal
+    private val _selectedAnimal = MutableStateFlow<AnimalEntity?>(null)
+    val selectedAnimal: StateFlow<AnimalEntity?> = _selectedAnimal
 
     fun fetchZooAreas() {
         viewModelScope.launch {
@@ -63,15 +66,9 @@ class ZooAreaViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedAnimal(animal: AnimalResponse.Animal) {
+    fun setSelectedAnimal(animal: AnimalEntity) {
         viewModelScope.launch {
             _selectedAnimal.emit(animal)
         }
     }
-}
-
-sealed class UiState<out T> {
-    data object Loading : UiState<Nothing>()
-    data class Success<out T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
 }

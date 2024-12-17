@@ -32,14 +32,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bryantcoding.zooappcompose.R
-import com.bryantcoding.zooappcompose.data.model.ZooAreaResponse
+import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
 import com.bryantcoding.zooappcompose.ui.components.BaseLoading
 import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
 import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
 import com.bryantcoding.zooappcompose.ui.components.CustomTopBar
 import com.bryantcoding.zooappcompose.ui.navgation.Route
-import com.bryantcoding.zooappcompose.viewmodel.UiState
-import com.bryantcoding.zooappcompose.viewmodel.ZooAreaViewModel
+import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaViewModel
+import com.bryantcoding.zooappcompose.utils.UiState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -77,7 +77,7 @@ fun ZooAreasScreen(
 }
 
 @Composable
-fun ShowZooAreas(navController: NavController, data: List<ZooAreaResponse.ZooArea>) {
+fun ShowZooAreas(navController: NavController, data: List<ZooAreaEntity>) {
     LazyColumn {
         items(data, key = { it.id ?: 0 }) { zooArea ->
             Card(
@@ -86,7 +86,11 @@ fun ShowZooAreas(navController: NavController, data: List<ZooAreaResponse.ZooAre
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(8.dp)
                     .clickable {
-                        navController.navigate(Route.ZooAreaDetailScreen.createRoute(zooArea.id ?: 0))
+                        navController.navigate(
+                            Route.ZooAreaDetailScreen.createRoute(
+                                zooArea.id ?: 0
+                            )
+                        )
                     },
                 shape = RoundedCornerShape(8.dp),
                 elevation = CardDefaults.cardElevation(

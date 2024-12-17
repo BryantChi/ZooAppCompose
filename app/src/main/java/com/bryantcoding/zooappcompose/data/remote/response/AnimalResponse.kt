@@ -1,18 +1,18 @@
-package com.bryantcoding.zooappcompose.data.model
+package com.bryantcoding.zooappcompose.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class AnimalResponse(
     val result: Result
-): Serializable {
+) : Serializable {
     data class Result(
         @SerializedName("limit") val limit: Int,
         @SerializedName("offset") val offset: Int,
         @SerializedName("count") val count: Int,
         @SerializedName("sort") val sort: String,
         @SerializedName("results") val results: List<Animal>? = listOf()
-    ): Serializable
+    ) : Serializable
 
     data class Animal(
         @SerializedName("_id") val id: Int,
@@ -63,12 +63,12 @@ data class AnimalResponse(
         @SerializedName("a_vedio_url") val videoUrl: String?,
         @SerializedName("a_update") val update: String?,
         @SerializedName("a_cid") val cid: String?
-    ): Serializable
+    ) : Serializable
 
     data class ImportDate(
         @SerializedName("date") val date: String,
         @SerializedName("timezone_type") val timezoneType: Int,
         @SerializedName("timezone") val timezone: String
-    ): Serializable
+    ) : Serializable
 }
 

@@ -1,7 +1,7 @@
 package com.bryantcoding.zooappcompose.data.remote
 
-import com.bryantcoding.zooappcompose.data.model.AnimalResponse
-import com.bryantcoding.zooappcompose.data.model.ZooAreaResponse
+import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
+import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

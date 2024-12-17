@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bryantcoding.zooappcompose.R
-import com.bryantcoding.zooappcompose.data.model.AnimalResponse
-import com.bryantcoding.zooappcompose.data.model.ZooAreaResponse
+import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
+import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
 import com.bryantcoding.zooappcompose.ui.components.BaseLoading
 import com.bryantcoding.zooappcompose.ui.components.CommonBottomSheet
 import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
@@ -62,8 +62,8 @@ import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
 import com.bryantcoding.zooappcompose.ui.components.CustomTopBar
 import com.bryantcoding.zooappcompose.ui.components.SingleImageCarousel
 import com.bryantcoding.zooappcompose.ui.navgation.Route
-import com.bryantcoding.zooappcompose.viewmodel.UiState
-import com.bryantcoding.zooappcompose.viewmodel.ZooAreaViewModel
+import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaViewModel
+import com.bryantcoding.zooappcompose.utils.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -77,9 +77,11 @@ fun ZooAreaDetailScreen(
     val animalListState by viewModel.animalList.collectAsState()
     val selectedAnimal = viewModel.selectedAnimal.collectAsState(null)
     val id = navController.currentBackStackEntry?.arguments?.getString("id")
-    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = BottomSheetState(
-        BottomSheetValue.Collapsed, Density(LocalContext.current)
-    ))
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(
+            BottomSheetValue.Collapsed, Density(LocalContext.current)
+        )
+    )
     val modelSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
@@ -111,7 +113,10 @@ fun ZooAreaDetailScreen(
         Scaffold(
             topBar = {
                 CustomTopBar(
-                    title = zooAreaDetail.run { if (this is UiState.Success) data.eName ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name) },
+                    title = zooAreaDetail.run {
+                        if (this is UiState.Success) data.eName
+                            ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name)
+                    },
                     navController = navController,
                     isBack = true
                 )
@@ -120,7 +125,15 @@ fun ZooAreaDetailScreen(
             Box(modifier = Modifier.padding(innerPadding)) {
                 when (val state = zooAreaDetail) {
                     is UiState.Loading -> BaseLoading()
-                    is UiState.Success -> ShowZooAreasDetail(navController, state.data, viewModel, animalListState, modelSheetState, coroutineScope)
+                    is UiState.Success -> ShowZooAreasDetail(
+                        navController,
+                        state.data,
+                        viewModel,
+                        animalListState,
+                        modelSheetState,
+                        coroutineScope
+                    )
+
                     is UiState.Error -> CustomErrorText(state.message)
                 }
             }
@@ -160,9 +173,9 @@ fun ZooAreaDetailScreen(
 @Composable
 fun ShowZooAreasDetail(
     navController: NavController,
-    data: ZooAreaResponse.ZooArea,
+    data: ZooAreaEntity,
     viewModel: ZooAreaViewModel,
-    animalListState: UiState<List<AnimalResponse.Animal>>,
+    animalListState: UiState<List<AnimalEntity>>,
     modelSheetState: ModalBottomSheetState,
     coroutineScope: CoroutineScope
 ) {
@@ -234,17 +247,19 @@ fun ShowZooAreasDetail(
 
         // 分隔符
         item {
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(16.dp)
-                .background(Color.Gray.copy(alpha = 0.2f)))
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp)
+                    .background(Color.Gray.copy(alpha = 0.2f))
+            )
         }
 
         // 滾動列表部分
         when (animalListState) {
             is UiState.Success -> {
                 animalListState.data.takeIf { it.isNotEmpty() }?.run {
-                    items(this, key = { it.id  }) { animal ->
+                    items(this, key = { it.id }) { animal ->
                         AnimalItem(animal, navController) {
                             viewModel.setSelectedAnimal(animal)
                             coroutineScope.launch {
@@ -272,6 +287,7 @@ fun ShowZooAreasDetail(
                     CustomErrorText(animalListState.message)
                 }
             }
+
             is UiState.Loading -> {
                 item {
                     BaseLoading()
@@ -283,7 +299,7 @@ fun ShowZooAreasDetail(
 
 @Composable
 fun AnimalItem(
-    animal: AnimalResponse.Animal,
+    animal: AnimalEntity,
     navController: NavController,
     onClick: (() -> Unit)? = null
 ) {
@@ -317,12 +333,14 @@ fun AnimalItem(
 //                    animal.pic03Url ?: "",
 //                    animal.pic04Url ?: ""
 //                ))
-                SingleImageCarousel(images = listOf(
-                    "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9316177/fca1ca06-fef3-4303-b266-44de8c084d6a@710x470.jpg",
-                    "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9313611/a729e20b-33b8-4bfe-a7f3-f1da959386f4@710x470.jpg",
-                    "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9313073/6ea843c7-6591-41e7-9bdf-134bf5187cf9@710x470.jpg",
-                    "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9310472/59fcb6fe-766a-451c-930f-25da7e6e1958@710x470.jpg"
-                ))
+                SingleImageCarousel(
+                    images = listOf(
+                        "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9316177/fca1ca06-fef3-4303-b266-44de8c084d6a@710x470.jpg",
+                        "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9313611/a729e20b-33b8-4bfe-a7f3-f1da959386f4@710x470.jpg",
+                        "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9313073/6ea843c7-6591-41e7-9bdf-134bf5187cf9@710x470.jpg",
+                        "https://www-ws.gov.taipei/001/Upload/432/relpic/10162/9310472/59fcb6fe-766a-451c-930f-25da7e6e1958@710x470.jpg"
+                    )
+                )
             }
 
             Column(
@@ -359,7 +377,7 @@ fun AnimalItem(
 }
 
 @Composable
-fun AnimalBottomSheetContent(animal: AnimalResponse.Animal) {
+fun AnimalBottomSheetContent(animal: AnimalEntity) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
