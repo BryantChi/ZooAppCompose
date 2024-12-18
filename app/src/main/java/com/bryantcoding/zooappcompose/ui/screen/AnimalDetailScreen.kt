@@ -63,7 +63,6 @@ fun AnimalDetailScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShowAnimalDetail(animal: AnimalEntity) {
     LazyColumn(
