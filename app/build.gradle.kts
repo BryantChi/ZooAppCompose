@@ -34,6 +34,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -48,6 +49,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 
 }
@@ -92,5 +96,7 @@ dependencies {
     implementation(libs.room.ktx)
 
     implementation(libs.coroutines.core)
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
 }

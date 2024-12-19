@@ -1,6 +1,5 @@
 package com.bryantcoding.zooappcompose.ui.screen
 
-import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,8 +32,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,10 +48,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bryantcoding.zooappcompose.R
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
@@ -70,12 +73,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun ZooAreaDetailScreen(
     navController: NavController,
-    viewModel: ZooAreaDetailViewModel
+    zooAreaDetail: UiState<ZooAreaEntity>,
+    animalListState: UiState<List<AnimalEntity>>,
 ) {
-    val zooAreaDetail by viewModel.zooAreaDetail.collectAsState()
-    val animalListState by viewModel.animalList.collectAsState()
-    val selectedAnimal = viewModel.selectedAnimal.collectAsState(null)
-    val id = navController.currentBackStackEntry?.arguments?.getString("id")
+    val selectedAnimal = remember { mutableStateOf<AnimalEntity?>(null) }
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(
             BottomSheetValue.Collapsed, Density(LocalContext.current)
@@ -83,18 +84,6 @@ fun ZooAreaDetailScreen(
     )
     val modelSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-
-    id?.run {
-        LaunchedEffect(id) {
-            viewModel.fetchZooAreaDetail(id.toInt())
-        }
-
-        LaunchedEffect(zooAreaDetail) {
-            if (zooAreaDetail is UiState.Success) {
-                viewModel.fetchAnimalsList((zooAreaDetail as UiState.Success).data.eName ?: "")
-            }
-        }
-    }
 
     CommonBottomSheet(
         modifier = Modifier
@@ -118,18 +107,18 @@ fun ZooAreaDetailScreen(
             },
             isBack = true
         ) {
-            when (val state = zooAreaDetail) {
+            when (zooAreaDetail) {
                 is UiState.Loading -> BaseLoading()
                 is UiState.Success -> ShowZooAreasDetail(
                     navController,
-                    state.data,
-                    viewModel,
+                    zooAreaDetail.data,
                     animalListState,
+                    selectedAnimal,
                     modelSheetState,
                     coroutineScope
                 )
 
-                is UiState.Error -> CustomErrorText(state.message)
+                is UiState.Error -> CustomErrorText(zooAreaDetail.message)
             }
         }
     }
@@ -167,8 +156,8 @@ fun ZooAreaDetailScreen(
 fun ShowZooAreasDetail(
     navController: NavController,
     data: ZooAreaEntity,
-    viewModel: ZooAreaDetailViewModel,
     animalListState: UiState<List<AnimalEntity>>,
+    selectedAnimal: MutableState<AnimalEntity?>,
     modelSheetState: ModalBottomSheetState,
     coroutineScope: CoroutineScope
 ) {
@@ -226,10 +215,9 @@ fun ShowZooAreasDetail(
                             annotations
                                 .firstOrNull()
                                 ?.let { annotation ->
-                                    val encodedUrl = Uri.encode(annotation.item)
                                     navController.navigate(
                                         Route.WebViewScreen.createRoute(
-                                            encodedUrl
+                                            annotation.item
                                         )
                                     )
                                 }
@@ -262,7 +250,7 @@ fun ShowZooAreasDetail(
                                 )
                             },
                             onLongClick = {
-                                viewModel.setSelectedAnimal(animal)
+                                selectedAnimal.value = animal
                                 coroutineScope.launch {
                                     modelSheetState.show()
 //                            scaffoldState.bottomSheetState.expand()
@@ -418,4 +406,15 @@ fun AnimalBottomSheetContent(animal: AnimalEntity) {
             }
         }
     }
+}
+
+
+@Preview
+@Composable
+fun ZooAreaDetailScreenPreview() {
+    ZooAreaDetailScreen(
+        navController = rememberNavController(),
+        zooAreaDetail = UiState.Success(ZooAreaEntity()),
+        animalListState = UiState.Success(listOf())
+    )
 }

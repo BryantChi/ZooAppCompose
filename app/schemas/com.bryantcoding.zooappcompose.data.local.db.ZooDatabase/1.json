@@ -1,0 +1,198 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "4492c1aeceaec0a32ee2716c0a388334",
+    "entities": [
+      {
+        "tableName": "zoo_area_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `eName` TEXT NOT NULL, `ePicUrl` TEXT NOT NULL, `eInfo` TEXT NOT NULL, `eMemo` TEXT NOT NULL, `eCategory` TEXT NOT NULL, `eUrl` TEXT NOT NULL, `eGeo` TEXT NOT NULL, `eNo` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eName",
+            "columnName": "eName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ePicUrl",
+            "columnName": "ePicUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eInfo",
+            "columnName": "eInfo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eMemo",
+            "columnName": "eMemo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eCategory",
+            "columnName": "eCategory",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eUrl",
+            "columnName": "eUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eGeo",
+            "columnName": "eGeo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eNo",
+            "columnName": "eNo",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "animal_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `nameCh` TEXT, `nameEn` TEXT, `summary` TEXT, `habitat` TEXT, `behavior` TEXT, `feature` TEXT, `pic01Url` TEXT, `pic02Url` TEXT, `pic03Url` TEXT, `pic04Url` TEXT, `conservation` TEXT, `geo` TEXT, `location` TEXT, `distribution` TEXT, `diet` TEXT, `importDate` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameCh",
+            "columnName": "nameCh",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nameEn",
+            "columnName": "nameEn",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "summary",
+            "columnName": "summary",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "habitat",
+            "columnName": "habitat",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "behavior",
+            "columnName": "behavior",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "feature",
+            "columnName": "feature",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pic01Url",
+            "columnName": "pic01Url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pic02Url",
+            "columnName": "pic02Url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pic03Url",
+            "columnName": "pic03Url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pic04Url",
+            "columnName": "pic04Url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "conservation",
+            "columnName": "conservation",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "geo",
+            "columnName": "geo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "distribution",
+            "columnName": "distribution",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "diet",
+            "columnName": "diet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "importDate",
+            "columnName": "importDate",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4492c1aeceaec0a32ee2716c0a388334')"
+    ]
+  }
+}

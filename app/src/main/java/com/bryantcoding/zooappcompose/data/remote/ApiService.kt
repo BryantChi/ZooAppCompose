@@ -2,6 +2,7 @@ package com.bryantcoding.zooappcompose.data.remote
 
 import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
 import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -19,7 +20,7 @@ interface ApiService {
     @GET("api/v1/dataset/9683ba26-109e-4cb8-8f3d-03d1b349db9f")
     suspend fun getZooAreas(
         @Query("scope") scope: String = DEFAULT_SCOPE
-    ): ZooAreaResponse
+    ): Response<ZooAreaResponse>
 
     /**
     * 臺北市立動物園_動物簡介 API
@@ -29,6 +30,6 @@ interface ApiService {
     @GET("api/v1/dataset/6afa114d-38a2-4e3c-9cfd-29d3bd26b65b")
     suspend fun getAnimals(
         @Query("scope") scope: String = DEFAULT_SCOPE
-    ): AnimalResponse
+    ): Response<AnimalResponse>
 
 }

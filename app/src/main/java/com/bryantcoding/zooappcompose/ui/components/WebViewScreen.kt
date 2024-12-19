@@ -15,8 +15,6 @@ import androidx.navigation.NavController
 @Composable
 fun WebViewScreen(navController: NavController, url: String) {
 
-    val decodedUrl = Uri.decode(url)
-
     Scaffold(
         topBar = {
             CustomTopBar(
@@ -40,7 +38,7 @@ fun WebViewScreen(navController: NavController, url: String) {
                     this.settings.javaScriptEnabled = true
                     this.settings.allowFileAccess = false
                     this.settings.allowContentAccess = false
-                    loadUrl(decodedUrl)
+                    loadUrl(url)
                 }
             })
         }

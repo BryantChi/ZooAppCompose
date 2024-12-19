@@ -19,47 +19,38 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bryantcoding.zooappcompose.R
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
 import com.bryantcoding.zooappcompose.ui.components.BaseLoading
 import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
 import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
 import com.bryantcoding.zooappcompose.ui.navgation.Route
-import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaViewModel
 import com.bryantcoding.zooappcompose.utils.UiState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ZooAreasScreen(
     navController: NavController,
-    viewModel: ZooAreaViewModel
+    zooAreas: UiState<List<ZooAreaEntity>>
 ) {
-    val zooAreas by viewModel.zooInfo.collectAsState()
-
-    if (zooAreas !is UiState.Success) {
-        LaunchedEffect(Unit) {
-            viewModel.fetchZooAreas()
-        }
-    }
 
     BaseScreen(
         navController = navController,
         title = stringResource(id = R.string.zoo_name)
     ) {
-        when (val state = zooAreas) {
+        when (zooAreas) {
             is UiState.Loading -> BaseLoading()
-            is UiState.Success -> ShowZooAreas(navController, state.data)
-            is UiState.Error -> CustomErrorText(state.message)
+            is UiState.Success -> ShowZooAreas(navController, zooAreas.data)
+            is UiState.Error -> CustomErrorText(zooAreas.message)
         }
     }
 }
@@ -67,7 +58,7 @@ fun ZooAreasScreen(
 @Composable
 fun ShowZooAreas(navController: NavController, data: List<ZooAreaEntity>) {
     LazyColumn {
-        items(data, key = { it.id ?: 0 }) { zooArea ->
+        items(data, key = { it.id }) { zooArea ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -130,4 +121,13 @@ fun ShowZooAreas(navController: NavController, data: List<ZooAreaEntity>) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ZooAreasScreenPreview() {
+    ZooAreasScreen(
+        navController = rememberNavController(),
+        zooAreas = UiState.Success(listOf())
+    )
 }

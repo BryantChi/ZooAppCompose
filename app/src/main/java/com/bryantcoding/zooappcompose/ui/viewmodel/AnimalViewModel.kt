@@ -1,5 +1,6 @@
 package com.bryantcoding.zooappcompose.ui.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
@@ -13,14 +14,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AnimalViewModel @Inject constructor(
-    private val getDataUseCase: GetDataUseCase
+    private val getDataUseCase: GetDataUseCase,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _animal = MutableStateFlow<UiState<AnimalEntity>>(UiState.Loading)
     val animal: StateFlow<UiState<AnimalEntity>> = _animal
 
-    fun fetchAnimalDetail(animalID: Int) {
+    init {
+        val id = savedStateHandle.get<String>("id")
+        id?.let { fetchAnimalDetail(it.toInt()) }
+    }
+
+    private fun fetchAnimalDetail(animalID: Int) {
         viewModelScope.launch {
-            _animal.emit(UiState.Loading)
             try {
                 val result = getDataUseCase.getAnimalDetail(animalID)
                 _animal.emit(UiState.Success(result))
