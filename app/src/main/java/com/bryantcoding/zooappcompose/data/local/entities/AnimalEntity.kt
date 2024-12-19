@@ -59,4 +59,4 @@ data class AnimalEntity(
 
     @SerializedName("_importdate")
     val importDate: String? = ""
-) : Serializable
+)

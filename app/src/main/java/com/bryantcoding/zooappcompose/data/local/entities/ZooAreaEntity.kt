@@ -35,4 +35,4 @@ data class ZooAreaEntity(
     @SerializedName("e_no")
     val eNo: String = "", // 館區編號
 
-) : Serializable
+)
