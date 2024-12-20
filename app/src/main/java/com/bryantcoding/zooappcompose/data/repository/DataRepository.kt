@@ -1,6 +1,5 @@
 package com.bryantcoding.zooappcompose.data.repository
 
-import android.util.Log
 import com.bryantcoding.zooappcompose.data.local.db.ZooDao
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
@@ -8,9 +7,8 @@ import com.bryantcoding.zooappcompose.data.remote.ApiService
 import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
 import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
 import com.bryantcoding.zooappcompose.utils.toEntity
-import javax.inject.Inject
 
-class DataRepository @Inject constructor(
+class DataRepository(
     private val apiService: ApiService,
     private val zooDao: ZooDao
 ) : BaseRepository {
@@ -23,7 +21,8 @@ class DataRepository @Inject constructor(
         try {
             val response = apiService.getZooAreas()
             if (response.isSuccessful) {
-                val entities = response.body()?.result?.results?.map { it.toEntity() } ?: emptyList()
+                val entities =
+                    response.body()?.result?.results?.map { it.toEntity() } ?: emptyList()
                 zooDao.insertZooAreas(entities)
                 entities
             } else {
@@ -43,7 +42,8 @@ class DataRepository @Inject constructor(
         try {
             val response = apiService.getAnimals()
             if (response.isSuccessful) {
-                val entities = response.body()?.result?.results?.map { it.toEntity() } ?: emptyList()
+                val entities =
+                    response.body()?.result?.results?.map { it.toEntity() } ?: emptyList()
                 zooDao.insertAnimals(entities)
                 entities
             } else {

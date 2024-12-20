@@ -1,14 +1,10 @@
 package com.bryantcoding.zooappcompose.domain.usecase
 
-import android.util.Log
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
 import com.bryantcoding.zooappcompose.data.repository.DataRepository
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class GetDataUseCase @Inject constructor(
+class GetDataUseCase(
     private val dataRepository: DataRepository
 ) {
     /**

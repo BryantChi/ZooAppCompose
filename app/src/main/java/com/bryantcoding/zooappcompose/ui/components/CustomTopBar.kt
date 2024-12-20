@@ -26,7 +26,7 @@ fun CustomTopBar(
     title: String,
     navController: NavController? = null, // 動態導航支援
     isBack: Boolean = false,
-    onClick: (() -> Unit)? = null,
+    onClick: () -> Unit = {},
     backgroundColor: Color = MaterialTheme.colorScheme.background, // 背景色
     contentColor: Color = MaterialTheme.colorScheme.onBackground, // 內容顏色
     actions: @Composable (RowScope.() -> Unit)? = null // 自訂操作按鈕
@@ -43,11 +43,7 @@ fun CustomTopBar(
             if (isBack) {
                 IconButton(
                     onClick = {
-                        if (navController != null) {
-                            navController.popBackStack() // 動態返回
-                        } else {
-                            onClick?.invoke() // 自訂返回邏輯
-                        }
+                        navController?.popBackStack()
                     }
                 ) {
                     Icon(
@@ -58,10 +54,7 @@ fun CustomTopBar(
                 }
             } else {
                 IconButton(
-                    onClick = {
-                        Log.d("CustomTopBar", "Menu button clicked")
-                        onClick?.invoke()
-                    }
+                    onClick = onClick
                 ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
