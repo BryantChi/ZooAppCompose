@@ -18,24 +18,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,19 +52,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bryantcoding.zooappcompose.R
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity
 import com.bryantcoding.zooappcompose.ui.components.BaseLoading
-import com.bryantcoding.zooappcompose.ui.components.CommonBottomSheet
 import com.bryantcoding.zooappcompose.ui.components.CustomErrorText
 import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
 import com.bryantcoding.zooappcompose.ui.components.SingleImageCarousel
 import com.bryantcoding.zooappcompose.ui.navgation.Route
-import com.bryantcoding.zooappcompose.ui.viewmodel.ZooAreaDetailViewModel
 import com.bryantcoding.zooappcompose.utils.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -76,90 +73,57 @@ fun ZooAreaDetailScreen(
     zooAreaDetail: UiState<ZooAreaEntity>,
     animalListState: UiState<List<AnimalEntity>>,
 ) {
-    val selectedAnimal = remember { mutableStateOf<AnimalEntity?>(null) }
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(
-            BottomSheetValue.Collapsed, Density(LocalContext.current)
-        )
+    var selectedAnimal by remember { mutableStateOf<AnimalEntity?>(null) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true // 跳過部分展開狀態
     )
-    val modelSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    CommonBottomSheet(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface),
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetBackgroundColor = MaterialTheme.colorScheme.surface,
-        sheetState = modelSheetState,
-        scope = coroutineScope,
-        sheetContent = {
-            selectedAnimal.value?.let { animal ->
-                AnimalBottomSheetContent(animal)
-            }
-        }
+    BaseScreen(
+        navController = navController,
+        title = zooAreaDetail.run {
+            if (this is UiState.Success) data.eName
+                ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name)
+        },
+        isBack = true
     ) {
+        when (zooAreaDetail) {
+            is UiState.Loading -> BaseLoading()
+            is UiState.Success -> ShowZooAreasDetail(
+                navController,
+                zooAreaDetail.data,
+                animalListState,
+                onAnimalSelected = {
+                    selectedAnimal = it
+                    showBottomSheet = true
+                }
+            )
 
-        BaseScreen(
-            navController = navController,
-            title = zooAreaDetail.run {
-                if (this is UiState.Success) data.eName
-                    ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name)
-            },
-            isBack = true
+            is UiState.Error -> CustomErrorText(zooAreaDetail.message)
+        }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { coroutineScope.launch { showBottomSheet = false } },
+            sheetState = sheetState
         ) {
-            when (zooAreaDetail) {
-                is UiState.Loading -> BaseLoading()
-                is UiState.Success -> ShowZooAreasDetail(
-                    navController,
-                    zooAreaDetail.data,
-                    animalListState,
-                    selectedAnimal,
-                    modelSheetState,
-                    coroutineScope
-                )
-
-                is UiState.Error -> CustomErrorText(zooAreaDetail.message)
+            selectedAnimal?.let { animal ->
+                AnimalBottomSheetContent(animal)
             }
         }
     }
 
-//    BottomSheetScaffold(
-//        scaffoldState = scaffoldState,
-//        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-//        sheetBackgroundColor = MaterialTheme.colorScheme.surface,
-//        sheetPeekHeight = 0.dp,
-//        sheetContent = {
-//            selectedAnimal.value?.let { animal ->
-//                AnimalBottomSheetContent(animal)
-//            }
-//        },
-//        topBar = {
-//            CustomTopBar(
-//                title = zooAreaDetail.run { if (this is UiState.Success) data.eName ?: stringResource(id = R.string.zoo_name) else stringResource(id = R.string.zoo_name) },
-//                navController = navController,
-//                isBack = true
-//            )
-//        }
-//    ) { innerPadding ->
-//        Box(modifier = Modifier.padding(innerPadding)) {
-//            when (val state = zooAreaDetail) {
-//                is UiState.Loading -> BaseLoading()
-//                is UiState.Success -> ShowZooAreasDetail(navController, state.data, viewModel, animalListState, scaffoldState, coroutineScope)
-//                is UiState.Error -> ShowError(state.message)
-//            }
-//        }
-//    }
-
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowZooAreasDetail(
     navController: NavController,
     data: ZooAreaEntity,
     animalListState: UiState<List<AnimalEntity>>,
-    selectedAnimal: MutableState<AnimalEntity?>,
-    modelSheetState: ModalBottomSheetState,
-    coroutineScope: CoroutineScope
+    onAnimalSelected: (AnimalEntity) -> Unit
 ) {
 
     LazyColumn(
@@ -250,11 +214,7 @@ fun ShowZooAreasDetail(
                                 )
                             },
                             onLongClick = {
-                                selectedAnimal.value = animal
-                                coroutineScope.launch {
-                                    modelSheetState.show()
-//                            scaffoldState.bottomSheetState.expand()
-                                }
+                                onAnimalSelected(animal)
                             })
                     }
                 } ?: run {
