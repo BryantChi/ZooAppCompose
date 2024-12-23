@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,10 +72,12 @@ fun ShowAnimalDetail(animal: AnimalEntity) {
                 .padding(16.dp)
         ) {
             Text(
+                modifier = Modifier.testTag("animal_name_ch"),
                 text = animal.nameCh ?: "",
                 style = TextStyle(color = Color.Black, fontSize = 18.sp)
             )
             Text(
+                modifier = Modifier.testTag("animal_name_en"),
                 text = animal.nameEn ?: "",
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
@@ -90,6 +93,7 @@ fun ShowAnimalDetail(animal: AnimalEntity) {
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
             Text(
+                modifier = Modifier.testTag("animal_distribution"),
                 text = animal.distribution ?: "",
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
@@ -105,6 +109,7 @@ fun ShowAnimalDetail(animal: AnimalEntity) {
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
             Text(
+                modifier = Modifier.testTag("animal_habitat"),
                 text = animal.habitat ?: "",
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
@@ -120,6 +125,7 @@ fun ShowAnimalDetail(animal: AnimalEntity) {
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
             Text(
+                modifier = Modifier.testTag("animal_feature"),
                 text = animal.feature ?: "",
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
@@ -135,6 +141,7 @@ fun ShowAnimalDetail(animal: AnimalEntity) {
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )
             Text(
+                modifier = Modifier.testTag("animal_behavior"),
                 text = animal.behavior ?: "",
                 style = TextStyle(color = Color.Black, fontSize = 16.sp)
             )

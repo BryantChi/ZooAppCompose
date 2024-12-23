@@ -16,18 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.material.BottomSheetState
-import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -39,7 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -49,7 +45,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -63,7 +58,6 @@ import com.bryantcoding.zooappcompose.ui.components.CustomImageWithCoil
 import com.bryantcoding.zooappcompose.ui.components.SingleImageCarousel
 import com.bryantcoding.zooappcompose.ui.navgation.Route
 import com.bryantcoding.zooappcompose.utils.UiState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -128,6 +122,7 @@ fun ShowZooAreasDetail(
 
     LazyColumn(
         modifier = Modifier
+            .testTag("LazyColumnTag")
             .fillMaxWidth()
             .background(Color.White)
     ) {
@@ -205,7 +200,7 @@ fun ShowZooAreasDetail(
             is UiState.Success -> {
                 animalListState.data.takeIf { it.isNotEmpty() }?.run {
                     items(this, key = { it.id }) { animal ->
-                        AnimalItem(animal, navController,
+                        AnimalItem(animal,
                             onClick = {
                                 navController.navigate(
                                     Route.AnimalDetailScreen.createRoute(
@@ -250,7 +245,6 @@ fun ShowZooAreasDetail(
 @Composable
 fun AnimalItem(
     animal: AnimalEntity,
-    navController: NavController,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
 ) {
@@ -258,6 +252,7 @@ fun AnimalItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .testTag("animal_${animal.id}")
             .combinedClickable(
                 onClick = {
                     onClick?.invoke()

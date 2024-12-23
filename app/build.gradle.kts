@@ -43,17 +43,24 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.md"
         }
     }
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
-
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -68,13 +75,19 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material)
     implementation(libs.androidx.benchmark.common)
+    implementation(libs.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    implementation(libs.androidx.ui.test.junit4)
+    implementation(libs.androidx.ui.test.junit4.android)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.ui.test.manifest)
+    implementation(libs.mockk)
+    testImplementation(libs.robolectric)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -90,6 +103,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.navigation.compose)
+    implementation(libs.navigation.test)
 
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
