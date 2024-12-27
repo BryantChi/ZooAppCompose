@@ -44,7 +44,7 @@ class ZooAreaDetailViewModelTest {
     }
 
     @Test
-    fun `fetchZooAreaDetail with null ID - emits Error state`() = testScope.runTest {
+    fun fetchZooAreaDetailWithNullIDEmitsErrorState() = testScope.runTest {
 
         every { savedStateHandle.get<String>("id") } returns null
 
@@ -57,7 +57,7 @@ class ZooAreaDetailViewModelTest {
     }
 
     @Test
-    fun `fetchZooAreaDetail success - flow should emit Loading then Success`() = testScope.runTest {
+    fun fetchZooAreaDetailSuccessFlowShouldEmitLoadingThenSuccess() = testScope.runTest {
         // Arrange: 模擬成功回傳
         val zooAreaID = "1"
         val mockData = ZooAreaEntity(id = 1, eName = "Area 1", eInfo = "Description 1")
@@ -79,7 +79,7 @@ class ZooAreaDetailViewModelTest {
     }
 
     @Test
-    fun `fetchZooAreaDetail failure - flow should emit Loading then Error`() = testScope.runTest {
+    fun fetchZooAreaDetailFailureFlowShouldEmitLoadingThenError() = testScope.runTest {
         // Arrange: 模擬異常
         val zooAreaID = "1"
         val mockExceptionMessage = "Network Error"
@@ -101,7 +101,7 @@ class ZooAreaDetailViewModelTest {
     }
 
     @Test
-    fun `fetchAnimalsList success - flow should emit Loading then Success`() = testScope.runTest {
+    fun fetchAnimalsListSuccessFlowShouldEmitLoadingThenSuccess() = testScope.runTest {
         // Arrange: 模擬成功回傳
         val mockDataZooArea = ZooAreaEntity(id = 10, eName = "Area 10", eInfo = "Description 10")
         val mockDataAnimals = listOf(
@@ -136,7 +136,7 @@ class ZooAreaDetailViewModelTest {
     }
 
     @Test
-    fun `fetchAnimalsList failure - flow should emit Loading then Error`() = testScope.runTest {
+    fun fetchAnimalsListFailureFlowShouldEmitLoadingThenError() = testScope.runTest {
         val mockExceptionMessage = "Network Error"
         val mockDataZooArea = ZooAreaEntity(id = 10, eName = "Area 10", eInfo = "Description 10")
         every { savedStateHandle.get<String>("id") } returns "10"

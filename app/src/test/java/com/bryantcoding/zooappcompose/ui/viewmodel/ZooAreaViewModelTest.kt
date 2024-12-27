@@ -40,7 +40,7 @@ class ZooAreaViewModelTest {
     }
 
     @Test
-    fun `ViewModel initializes with default state`() {
+    fun viewModelInitializesWithDefaultState() {
         // Act: 初始化 ViewModel
         viewModel = ZooAreaViewModel(getDataUseCase)
 
@@ -49,7 +49,7 @@ class ZooAreaViewModelTest {
     }
 
     @Test
-    fun `fetchZooAreas empty list - flow should emit Loading then Success with empty data`() = testScope.runTest {
+    fun fetchZooAreasEmptyListFlowShouldEmitLoadingThenSuccessWithEmptyData() = testScope.runTest {
         val mockData = emptyList<ZooAreaEntity>()
         coEvery { getDataUseCase.getZooAreasList() } returns mockData
 
@@ -65,7 +65,7 @@ class ZooAreaViewModelTest {
     }
 
     @Test
-    fun `fetchZooAreas success - flow should emit Loading then Success`() = testScope.runTest {
+    fun fetchZooAreasSuccessFlowShouldEmitLoadingThenSuccess() = testScope.runTest {
         // Arrange: 模擬成功回傳
         val mockData = listOf(
             ZooAreaEntity(id = 1, eName = "Area 1", eInfo = "Description 1"),
@@ -88,7 +88,7 @@ class ZooAreaViewModelTest {
     }
 
     @Test
-    fun `fetchZooAreas failure - flow should emit Loading then Error`() = testScope.runTest {
+    fun fetchZooAreasFailureFlowShouldEmitLoadingThenError() = testScope.runTest {
         // Arrange: 模擬異常
         val mockExceptionMessage = "Network Error"
         coEvery { getDataUseCase.getZooAreasList() } throws Exception(mockExceptionMessage)
