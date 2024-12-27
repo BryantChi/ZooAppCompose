@@ -9,6 +9,8 @@ import com.bryantcoding.zooappcompose.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,17 +23,21 @@ class AnimalViewModel @Inject constructor(
     val animal: StateFlow<UiState<AnimalEntity>> = _animal
 
     init {
-        val id = savedStateHandle.get<String>("id")
-        id?.let { fetchAnimalDetail(it.toInt()) }
+        val id = savedStateHandle.get<String>("id")?.toIntOrNull()
+        if (id != null) {
+            fetchAnimalDetail(id)
+        } else {
+            _animal.update {  UiState.Error("Invalid ID") }
+        }
     }
 
     private fun fetchAnimalDetail(animalID: Int) {
         viewModelScope.launch {
             try {
                 val result = getDataUseCase.getAnimalDetail(animalID)
-                _animal.emit(UiState.Success(result))
+                _animal.update { UiState.Success(result) }
             } catch (e: Exception) {
-                _animal.emit(UiState.Error(e.message ?: "Unknown error"))
+                _animal.update { UiState.Error(e.message ?: "Unknown error") }
             }
         }
     }

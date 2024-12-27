@@ -76,40 +76,40 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.benchmark.common)
     implementation(libs.core)
+    implementation(libs.androidx.ui.test.junit4)
+    implementation(libs.androidx.ui.test.junit4.android)
+    implementation(libs.androidx.ui.test.manifest)
+    implementation(libs.mockk)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.coil.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.navigation.test)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.coroutines.core)
+    implementation(libs.kotlinx.coroutines.test)
+    implementation(libs.core.testing)
+    implementation(libs.turbine)
+
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    implementation(libs.androidx.ui.test.junit4)
-    implementation(libs.androidx.ui.test.junit4.android)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.androidx.ui.test.manifest)
-    implementation(libs.mockk)
-    testImplementation(libs.robolectric)
 
-    implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
-
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-
-    implementation(libs.okhttp3)
-    implementation(libs.okhttp3.logging.interceptor)
-
-    implementation(libs.coil.compose)
-
-    implementation(libs.navigation.compose)
-    implementation(libs.navigation.test)
-
-    implementation(libs.room.runtime)
     ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
-
-    implementation(libs.coroutines.core)
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 

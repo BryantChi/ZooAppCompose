@@ -23,7 +23,6 @@ fun CommonBottomSheet(
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
     sheetShape: Shape = MaterialTheme.shapes.large,
-    scope: CoroutineScope,
     content: @Composable () -> Unit
 ) {
     ModalBottomSheetLayout(

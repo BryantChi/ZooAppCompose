@@ -36,6 +36,9 @@ desugar_jdk_libs = "2.0.3"
 
 mockk = "1.13.5"
 core = "1.47.0"
+coroutinesTest = "1.7.3"
+coreTesting = "2.2.0"
+turbine = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -79,6 +82,9 @@ desugar_jdk_libs = { group = "com.android.tools", name = "desugar_jdk_libs", ver
 
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 core = { group = "com.google.ar", name = "core", version.ref = "core" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

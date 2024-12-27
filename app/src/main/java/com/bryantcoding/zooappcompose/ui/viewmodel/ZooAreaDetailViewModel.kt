@@ -27,9 +27,11 @@ class ZooAreaDetailViewModel @Inject constructor(
     val animalList: StateFlow<UiState<List<AnimalEntity>>> = _animalList
 
     init {
-        val zooAreaID = savedStateHandle.get<String>("id")
-        zooAreaID?.let {
-            fetchZooAreaDetail(it.toInt())
+        val zooAreaID = savedStateHandle.get<String>("id")?.toIntOrNull()
+        if (zooAreaID != null) {
+            fetchZooAreaDetail(zooAreaID)
+        } else {
+            _zooAreaDetail.value = UiState.Error("Invalid ID")
         }
 
         viewModelScope.launch {
