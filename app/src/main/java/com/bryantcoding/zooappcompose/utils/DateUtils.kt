@@ -1,11 +1,7 @@
 package com.bryantcoding.zooappcompose.utils
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 object DateUtils {
 

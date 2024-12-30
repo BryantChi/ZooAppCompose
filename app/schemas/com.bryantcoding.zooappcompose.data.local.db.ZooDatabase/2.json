@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "4492c1aeceaec0a32ee2716c0a388334",
+    "identityHash": "49b5fcbb026f63b5a62c0db5c314fcf1",
     "entities": [
       {
         "tableName": "zoo_area_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `eName` TEXT NOT NULL, `ePicUrl` TEXT NOT NULL, `eInfo` TEXT NOT NULL, `eMemo` TEXT NOT NULL, `eCategory` TEXT NOT NULL, `eUrl` TEXT NOT NULL, `eGeo` TEXT NOT NULL, `eNo` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `eName` TEXT, `ePicUrl` TEXT, `eInfo` TEXT, `eMemo` TEXT, `eCategory` TEXT, `eUrl` TEXT, `eGeo` TEXT, `eNo` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,49 +18,49 @@
             "fieldPath": "eName",
             "columnName": "eName",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "ePicUrl",
             "columnName": "ePicUrl",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "eInfo",
             "columnName": "eInfo",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "eMemo",
             "columnName": "eMemo",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "eCategory",
             "columnName": "eCategory",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "eUrl",
             "columnName": "eUrl",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "eGeo",
             "columnName": "eGeo",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "eNo",
             "columnName": "eNo",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -192,7 +192,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4492c1aeceaec0a32ee2716c0a388334')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '49b5fcbb026f63b5a62c0db5c314fcf1')"
     ]
   }
 }

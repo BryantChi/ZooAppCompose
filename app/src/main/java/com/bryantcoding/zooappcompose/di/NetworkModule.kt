@@ -60,7 +60,7 @@ object NetworkModule {
             .readTimeout(1, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .addInterceptor(headerInterceptor)
-            .hostnameVerifier { _, _ -> true }
+//            .hostnameVerifier { _, _ -> true }
             .build()
     }
 

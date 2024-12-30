@@ -15,7 +15,7 @@ data class AnimalResponse(
     ) : Serializable
 
     data class Animal(
-        @SerializedName("_id") val id: Int,
+        @SerializedName("_id") val id: Int?,
         @SerializedName("_importdate") val importDate: ImportDate?,
         @SerializedName("a_name_ch") val nameCh: String?,
         @SerializedName("a_summary") val summary: String?,

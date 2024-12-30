@@ -1,6 +1,5 @@
 package com.bryantcoding.zooappcompose.ui.components
 
-import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -11,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.bryantcoding.zooappcompose.config.Config
 
 @Composable
 fun WebViewScreen(navController: NavController, url: String) {
@@ -25,6 +25,7 @@ fun WebViewScreen(navController: NavController, url: String) {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
+            val trustedUrls = listOf(Config.BASE_URL)
             AndroidView(factory = { context ->
                 WebView(context).apply {
                     webViewClient = object : WebViewClient() {
@@ -32,12 +33,17 @@ fun WebViewScreen(navController: NavController, url: String) {
                             super.onPageFinished(view, url)
                         }
                         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                            return super.shouldOverrideUrlLoading(view, request)
+                            return if (trustedUrls.contains(url)) {
+                                super.shouldOverrideUrlLoading(view, request)
+                            } else {
+                                // Handle untrusted URLs
+                                true
+                            }
                         }
                     }
-                    this.settings.javaScriptEnabled = true
-                    this.settings.allowFileAccess = false
-                    this.settings.allowContentAccess = false
+                    settings.javaScriptEnabled = true
+                    settings.allowFileAccess = false
+                    settings.allowContentAccess = false
                     loadUrl(url)
                 }
             })

@@ -2,9 +2,7 @@ package com.bryantcoding.zooappcompose.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 @Entity(tableName = "animal_table")
 data class AnimalEntity(

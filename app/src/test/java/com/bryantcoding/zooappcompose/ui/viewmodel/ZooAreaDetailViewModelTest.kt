@@ -113,7 +113,7 @@ class ZooAreaDetailViewModelTest {
             getDataUseCase.getZooAreaDetail(mockDataZooArea.id)
         } returns mockDataZooArea
         coEvery {
-            getDataUseCase.getAnimalsList(mockDataZooArea.eName)
+            getDataUseCase.getAnimalsList(mockDataZooArea.eName ?: "")
         } returns mockDataAnimals
 
         viewModel = ZooAreaDetailViewModel(getDataUseCase, savedStateHandle)
@@ -131,7 +131,7 @@ class ZooAreaDetailViewModelTest {
 
         coVerify {
             getDataUseCase.getZooAreaDetail(mockDataZooArea.id)
-            getDataUseCase.getAnimalsList(mockDataZooArea.eName)
+            getDataUseCase.getAnimalsList(mockDataZooArea.eName ?: "")
         }
     }
 
@@ -144,7 +144,7 @@ class ZooAreaDetailViewModelTest {
             getDataUseCase.getZooAreaDetail(mockDataZooArea.id)
         } returns mockDataZooArea
         coEvery {
-            getDataUseCase.getAnimalsList(mockDataZooArea.eName)
+            getDataUseCase.getAnimalsList(mockDataZooArea.eName ?: "")
         } throws Exception(mockExceptionMessage)
 
         viewModel = ZooAreaDetailViewModel(getDataUseCase, savedStateHandle)
@@ -162,7 +162,7 @@ class ZooAreaDetailViewModelTest {
 
         coVerify {
             getDataUseCase.getZooAreaDetail(mockDataZooArea.id)
-            getDataUseCase.getAnimalsList(mockDataZooArea.eName)
+            getDataUseCase.getAnimalsList(mockDataZooArea.eName ?: "")
         }
     }
 

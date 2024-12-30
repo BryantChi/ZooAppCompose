@@ -204,7 +204,7 @@ fun ShowZooAreasDetail(
                             onClick = {
                                 navController.navigate(
                                     Route.AnimalDetailScreen.createRoute(
-                                        animal.id ?: 0
+                                        animal.id
                                     )
                                 )
                             },

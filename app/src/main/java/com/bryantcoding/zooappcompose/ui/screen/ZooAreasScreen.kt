@@ -67,7 +67,7 @@ fun ShowZooAreas(navController: NavController, data: List<ZooAreaEntity>) {
                     .clickable {
                         navController.navigate(
                             Route.ZooAreaDetailScreen.createRoute(
-                                zooArea.id ?: 0
+                                zooArea.id
                             )
                         )
                     },

@@ -40,6 +40,9 @@ coroutinesTest = "1.7.3"
 coreTesting = "2.2.0"
 turbine = "1.0.0"
 
+sonarqube = "4.3.0.3225"
+jacoco = "0.8.10"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -91,5 +94,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
-
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" } # sonarqube
+jacoco = { id = "jacoco", version.ref = "jacoco" }

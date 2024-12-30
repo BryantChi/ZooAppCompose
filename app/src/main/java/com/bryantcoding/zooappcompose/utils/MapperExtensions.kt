@@ -6,7 +6,7 @@ import com.bryantcoding.zooappcompose.data.remote.response.AnimalResponse
 import com.bryantcoding.zooappcompose.data.remote.response.ZooAreaResponse
 
 fun ZooAreaResponse.ZooArea.toEntity() = ZooAreaEntity(
-    id = id ?: 0,
+    id = id ?: -1,
     eName = eName ?: "",
     eInfo = eInfo ?: "",
     ePicUrl = ePicUrl ?: "",
@@ -18,7 +18,7 @@ fun ZooAreaResponse.ZooArea.toEntity() = ZooAreaEntity(
 )
 
 fun AnimalResponse.Animal.toEntity() = AnimalEntity(
-    id = id ?: 0,
+    id = id ?: -1,
     nameCh = nameCh ?: "",
     nameEn = nameEn ?: "",
     location = location ?: "",

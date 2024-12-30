@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.sonarqube)
+    id("jacoco")
 }
 
 android {
@@ -29,6 +31,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {
@@ -61,6 +66,61 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "ZooAppCompose")
+        property("sonar.host.url", "http://localhost:9000")
+        property("sonar.login", "sqp_6d4f3ecca472e7546b665d9aaa9e5c7205fb9160")
+
+        // 指定程式碼所在位置
+        property("sonar.sources", "src/main/java")
+
+        // 指定要排除的檔案
+        property("sonar.coverage.exclusions", "**/generated/**, **/*_Factory.kt, **/*_Impl.kt")
+
+        // 告知 SonarQube 使用 Jacoco 分析 Kotlin
+        property("sonar.kotlin.coveragePlugin", "jacoco")
+
+        // Jacoco 的 XML 報告路徑
+        property("sonar.coverage.jacoco.xmlReportPaths", "app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    description ="Jacocoreport"
+    group = "Jacocoreport"
+    dependsOn("testDebugUnitTest") // 先跑單元測試
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    classDirectories.setFrom(
+        fileTree("build/tmp/kotlin-classes/debug") {
+            exclude("**/generated/**", "**/*_Factory.kt", "**/*_Impl.kt")
+        }
+    )
+    executionData.setFrom(fileTree("build") {
+        include(
+            "app/build/**/jacoco/testDebugUnitTest.exec",
+            "app/build/jacoco/testDebugUnitTest.exec"
+        )
+    })
+}
+
+project.extensions.configure<JacocoPluginExtension> {
+    toolVersion = "0.8.11"
 }
 
 dependencies {

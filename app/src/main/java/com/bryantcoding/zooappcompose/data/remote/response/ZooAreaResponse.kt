@@ -16,7 +16,7 @@ data class ZooAreaResponse(
 
     data class ZooArea(
         @SerializedName("_id")
-        val id: Int? = 0,
+        val id: Int? = null,
         @SerializedName("e_name")
         val eName: String? = "", // 館區名稱
         @SerializedName("e_pic_url")

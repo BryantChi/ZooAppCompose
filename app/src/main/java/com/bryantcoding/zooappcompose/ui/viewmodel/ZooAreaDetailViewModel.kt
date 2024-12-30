@@ -1,6 +1,5 @@
 package com.bryantcoding.zooappcompose.ui.viewmodel
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -6,7 +6,6 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.bryantcoding.zooappcompose.data.local.entities.AnimalEntity
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity

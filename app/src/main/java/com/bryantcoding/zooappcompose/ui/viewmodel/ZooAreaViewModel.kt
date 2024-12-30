@@ -1,6 +1,5 @@
 package com.bryantcoding.zooappcompose.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bryantcoding.zooappcompose.data.local.entities.ZooAreaEntity

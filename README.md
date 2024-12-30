@@ -31,7 +31,13 @@
    - 實現 Room 資料庫集成，確保在離線環境下依然可存取資料。
 4. **高效圖片加載**：
     - 使用 Coil 圖片處理框架實現流暢的圖片加載體驗。
-5. **其他功能**：
+5. **網路請求支持**：
+    - 使用 Retrofit 和 Gson 處理網路請求，提供即時的數據更新。
+6. **非同步處理**：
+    - 使用 Kotlin Coroutines 提供非同步的處理方式，提高程式的效能。
+7. **測試支持**：
+    - 提供 JUnit 測試和 Mockk 測試框架的支持。
+8. **其他功能**：
     - BottomSheet的使用。
     - 圖片輪播。
 
@@ -48,6 +54,8 @@
 - **非同步處理**：Kotlin Coroutines
 - **圖片處理**：Coil
 - **資料庫管理**：Room
+- **UI 測試**：Junit
+- **Unit 測試**：Mockk
 
 ---
 
@@ -91,6 +99,17 @@ app/
 ├── di/                         // 依賴注入模組
 ├── config/                      // 應用程式配置
 └── utils/                      // 通用工具類與輔助函數
+
+Unit Test 目錄結構
+
+├── app/src/test/java/com/bryantcoding/zooappcompose/
+|   ├── ui/
+|   │   ├── screen/
+|   │   └── viewmodel/
+|   └── utils/
+├── app/src/androidTest/java/com/bryantcoding/zooappcompose/
+|   └── ui/
+|       └── screen/
 ```
 
 ---
@@ -130,8 +149,7 @@ app/
 ## 未來優化方向
 
 1. 增強 Edge-to-Edge 視覺效果，提升用戶沉浸感。
-2. 添加更多自動化 UI 測試，以提高應用的穩定性與可維護性。
-3. 支援多語系切換，滿足更多用戶需求。
+2. 支援多語系切換，滿足更多用戶需求。
 
 ---
 
