@@ -33,7 +33,8 @@ android {
             )
         }
         debug {
-            enableUnitTestCoverage = true
+//            enableUnitTestCoverage = true
+            isTestCoverageEnabled = true
         }
     }
     compileOptions {
@@ -66,16 +67,15 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 sonar {
     properties {
         property("sonar.projectKey", "ZooAppCompose")
         property("sonar.host.url", "http://localhost:9000")
-        property("sonar.login", "sqp_6d4f3ecca472e7546b665d9aaa9e5c7205fb9160")
+        property("sonar.token", "sqp_6d4f3ecca472e7546b665d9aaa9e5c7205fb9160")
+
+        property("sonar.gradle.skipCompile", "true")
 
         // 指定程式碼所在位置
         property("sonar.sources", "src/main/java")
@@ -86,14 +86,19 @@ sonar {
         // 告知 SonarQube 使用 Jacoco 分析 Kotlin
         property("sonar.kotlin.coveragePlugin", "jacoco")
 
+        property("sonar.projectVersion", "2.0.12")
+
+        property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
         // Jacoco 的 XML 報告路徑
-        property("sonar.coverage.jacoco.xmlReportPaths", "app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
     }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
     finalizedBy("jacocoTestReport")
+//    reports.junitXml.required.set(true)
+//    reports.junitXml.outputLocation.set(layout.buildDirectory.dir("test-results/testDebugUnitTest"))
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {
@@ -102,25 +107,27 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest") // 先跑單元測試
 
     reports {
+        isEnabled = true
         xml.required.set(true)
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
         html.required.set(true)
     }
     sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
     classDirectories.setFrom(
         fileTree("build/tmp/kotlin-classes/debug") {
-            exclude("**/generated/**", "**/*_Factory.kt", "**/*_Impl.kt")
+//            exclude("**/generated/**", "**/*_Factory.kt", "**/*_Impl.kt")
         }
     )
     executionData.setFrom(fileTree("build") {
         include(
-            "app/build/**/jacoco/testDebugUnitTest.exec",
-            "app/build/jacoco/testDebugUnitTest.exec"
+            "build/**/jacoco/testDebugUnitTest.exec",
+            "build/jacoco/testDebugUnitTest.exec"
         )
     })
 }
 
 project.extensions.configure<JacocoPluginExtension> {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.10"
 }
 
 dependencies {
@@ -159,6 +166,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation("org.junit.vintage:junit-vintage-engine:5.xx")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

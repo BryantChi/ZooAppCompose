@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.2" # 維持穩定性，稍低版本的 AGP 比較兼容
+agp = "8.5.2" # 維持穩定性，稍低版本的 AGP 比較兼容
 kotlin = "1.9.10" # Kotlin 2.0 還在測試中，建議使用穩定版
 coreKtx = "1.12.0"
 junit = "4.13.2"
@@ -8,7 +8,7 @@ espressoCore = "3.5.0"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.9.3"
 composeBom = "2024.10.00" # 最新穩定版 BOM
-robolectric = "4.10"
+robolectric = "4.10.3"
 
 hiltAndroid = "2.47" # 最新穩定版
 hiltCompose = "1.0.0"
